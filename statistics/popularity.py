@@ -14,7 +14,7 @@ def score_all(words):
     """
     res = []
     for word in words:
-        res.append({'word': word, 'score': score(word)})
+        res.append({word, score(word)})
     return res
 
 def score(word: String):
