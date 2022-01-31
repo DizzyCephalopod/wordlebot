@@ -1,6 +1,7 @@
 import string
 from statistics.popularity import score_all
 import util
+from word.rules import Rule, matches
 
 def scoring_mode():
     """
@@ -31,4 +32,19 @@ def backtest_mode(answer: string):
 
 
 if __name__ == '__main__':
-    scoring_mode()
+
+    rules = []
+
+    lexicon = util.read_lexicon()
+    lexicon = util.sort_lexicon(lexicon)
+    guesses = []
+    for key in lexicon.keys():
+        if matches(rules, key):
+            guesses.append(key[::-1])
+
+    fixed = []
+    guesses.sort()
+    for i in guesses:
+        fixed.append(i[::-1])
+
+    util.print_list(fixed)

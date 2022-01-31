@@ -56,3 +56,9 @@ def write_lexicon(lexicon):
         for word in lexicon.keys():
             _file.write(f"{word}|{lexicon[word]}")
             _file.write('\n')
+
+def sort_lexicon(lexicon):
+    d = {}
+    for i in sorted(lexicon.items(), key = lambda i:(i[0], i[1])):
+        d[i[0]] = i[1]
+    return d
