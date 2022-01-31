@@ -1,15 +1,16 @@
 import string
 from statistics.popularity import score_all
-from util import read_words, read_lexicon, print_lexicon
-
+import util
 
 def scoring_mode():
     """
     Runs the application in scoring mode to generate lexicon.txt
     """
-    words = read_words()
+    words = util.read_words()
     scores = score_all(words)
-    print_lexicon(scores)  # todo, dump these in lexicon.txt
+    util.write_lexicon(scores)
+    words = util.read_lexicon()
+    util.print_lexicon(words)
 
 
 def interactive_mode():
@@ -30,6 +31,4 @@ def backtest_mode(answer: string):
 
 
 if __name__ == '__main__':
-    # scoring_mode()
-    lexi = read_lexicon()
-    print_lexicon(lexi)
+    scoring_mode()

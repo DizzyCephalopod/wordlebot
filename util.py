@@ -29,7 +29,11 @@ def read_words():
     """
     Returns an array of all words in words.txt
     """
-    return read_file('resources/words.txt')
+    lines = read_file('resources/words.txt')
+    words = []
+    for line in lines:
+        words.extend(line.split(' '))
+    return words
 
 def read_lexicon():
     """
@@ -43,3 +47,12 @@ def read_lexicon():
         score = parts[1]
         lexicon[word] = score
     return lexicon
+
+def write_lexicon(lexicon):
+    """
+    Writes the scored words down as a lexicon.
+    """
+    with open('resources/lexicon.txt', 'w', encoding="utf-8") as _file:
+        for word in lexicon.keys():
+            _file.write(f"{word}|{lexicon[word]}")
+            _file.write('\n')
