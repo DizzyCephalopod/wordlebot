@@ -9,12 +9,11 @@ def print_list(arr):
     for i in arr:
         print(i)
 
-def print_lexicon(lexicon):
-    """ Prints a list of scores.
-    A score is in the format {'word': string, 'score': int}
+def print_dict(data):
+    """ Prints key value pairs in a dict
     """
-    for word in lexicon.keys():
-        print(f"{word}|{lexicon[word]}")
+    for key in data.keys():
+        print(f"{key}|{data[key]}")
 
 def read_file(filename):
     """ Reads all the lines in a file.
@@ -35,18 +34,27 @@ def read_words():
         words.extend(line.split(' '))
     return words
 
-def read_lexicon():
+def read_dict(filename):    
     """
-    Returns the dict of {'word': string, 'score': int} represented by lexicon.txt
+    Returns the dict of {'key': string, 'value': string} in a file
     """
-    lines = read_file('resources/lexicon.txt')
-    lexicon = {}
+    lines = read_file(filename)
+    data = {}
     for line in lines:
         parts = line.strip().split('|')
         word = parts[0]
         score = parts[1]
-        lexicon[word] = score
-    return lexicon
+        data[word] = score
+    return data
+
+def read_letters():
+    return read_dict('resources/letters.txt')
+
+def read_lexicon():
+    """
+    Returns the dict of {'word': string, 'score': int} represented by lexicon.txt
+    """
+    return read_dict('resources/lexicon.txt')
 
 def write_lexicon(lexicon):
     """

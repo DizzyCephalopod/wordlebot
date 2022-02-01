@@ -12,7 +12,7 @@ def scoring_mode():
     scores = stats.score_all(words)
     util.write_lexicon(scores)
     words = util.read_lexicon()
-    util.print_lexicon(words)
+    util.print_dict(words)
 
 
 def interactive_mode():
@@ -32,7 +32,36 @@ def backtest_mode(answer: string):
     pass
 
 
+def filter(lexicon, rules):
+    filtered = {}
+    for word in lexicon.keys():
+        if matches(rules, word):
+            filtered[word] = lexicon[word]
+    return filtered
+
+
 if __name__ == '__main__':
     lexicon = util.read_lexicon()
     words = util.read_words()
+    letters = util.read_letters()
+
+    rules = []
+    rules.append(Rule.word().does_not_have('A'))
+    rules.append(Rule.word().has('E').at(1))
+    rules.append(Rule.word().has('R').anywhere())
+    rules.append(Rule.word().does_not_have('O'))
+    rules.append(Rule.word().does_not_have('S'))
+    rules.append(Rule.word().has('U').anywhere())
+    rules.append(Rule.word().does_not_have('N'))
+    rules.append(Rule.word().does_not_have('L'))
+    rules.append(Rule.word().does_not_have('I'))
+    rules.append(Rule.word().has('T').at(4))
+
+    lexicon = filter(lexicon, rules)
+    print("--------")
+    util.print_dict(lexicon)
+    print("--------")
+    words = [w for w in lexicon.keys()]
+
+    stats.score_yellow(words, letters)
     stats.score_positionally(words, lexicon)

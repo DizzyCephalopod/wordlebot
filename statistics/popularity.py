@@ -43,7 +43,7 @@ def scale(num_string):
     return math.log(num) if num != 0 else 0
 
 
-def letter_populatiry(lexicon):
+def letter_popularity(lexicon):
     scores = {}
     for word in lexicon.keys():
         for letter in set(word):
@@ -74,9 +74,23 @@ def score_positionally(words, lexicon):
             for key in lexicon.keys():
                 if rule.eval(key):
                     total += scale(lexicon[key])
-        
+
         if total > last:
             last = total
             best = word
             print(f"{word}|{total}")
-    print(best)
+    print(f"Best Positionally: {best}")
+
+
+def score_yellow(words, letters):
+    best = 'UNKNOWN'
+    last = 0
+    for word in words:
+        total = 0
+        for letter in set(word):
+            total += int(float(letters[letter]))
+        if total > last:
+            last = total
+            best = word
+            print(f"{word}|{total}")
+    print(f"Most Yellows: {best}")
