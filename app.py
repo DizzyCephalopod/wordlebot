@@ -1,14 +1,15 @@
 import string
-from statistics.popularity import score_all
+import statistics.popularity as stats
 import util
 from word.rules import Rule, matches
+
 
 def scoring_mode():
     """
     Runs the application in scoring mode to generate lexicon.txt
     """
     words = util.read_words()
-    scores = score_all(words)
+    scores = stats.score_all(words)
     util.write_lexicon(scores)
     words = util.read_lexicon()
     util.print_lexicon(words)
@@ -32,19 +33,6 @@ def backtest_mode(answer: string):
 
 
 if __name__ == '__main__':
-
-    rules = []
-
     lexicon = util.read_lexicon()
-    lexicon = util.sort_lexicon(lexicon)
-    guesses = []
-    for key in lexicon.keys():
-        if matches(rules, key):
-            guesses.append(key[::-1])
-
-    fixed = []
-    guesses.sort()
-    for i in guesses:
-        fixed.append(i[::-1])
-
-    util.print_list(fixed)
+    words = util.read_words()
+    stats.score_positionally(words, lexicon)

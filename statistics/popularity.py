@@ -5,6 +5,9 @@ Used for deteremining likelyhood of a word being an answer.
 from tokenize import String
 from time import sleep
 import requests
+import math
+from word.rules import Rule
+
 
 def score_all(words):
     """
@@ -18,6 +21,7 @@ def score_all(words):
         res[word] = score(word)
     return res
 
+
 def score(word: String):
     """
     Returns the score (int) of a single word.
@@ -26,9 +30,53 @@ def score(word: String):
     word -- The word to store
     """
     sleep(0.05)  # maybe not necessary, but trying to be polite
-    max_res = 50 # number of results max
+    max_res = 50  # number of results max
     request = f"https://api.onelook.com/words?max={max_res}&nonorm=1&k=rz_wke&rel_wke={word}"
     response = requests.get(request)
     score = sum([i['score'] for i in response.json()])
     print(f"{word}|{score}")
     return score
+
+
+def scale(num_string):
+    num = int(num_string)
+    return math.log(num) if num != 0 else 0
+
+
+def letter_populatiry(lexicon):
+    scores = {}
+    for word in lexicon.keys():
+        for letter in set(word):
+            scores[letter] = scores[letter] + \
+                scale(lexicon[word]) if letter in scores else scale(
+                    lexicon[word])
+    return {k: v for k, v in sorted(scores.items(), key=lambda item: item[1])}
+
+
+def score_lexicon(lexicon):
+    """
+    Provides a score for the remaining lexicon.
+    """
+    s = 0
+    for word in lexicon.keys():
+        s += score(lexicon[word])
+    return s
+
+
+def score_positionally(words, lexicon):
+    best = 'UNKNOWN'
+    last = 0
+    for word in words:
+        total = 0
+        for i in range(0, 5):
+            letter = word[i]
+            rule = Rule.word().has(letter).at(i)
+            for key in lexicon.keys():
+                if rule.eval(key):
+                    total += scale(lexicon[key])
+        
+        if total > last:
+            last = total
+            best = word
+            print(f"{word}|{total}")
+    print(best)
