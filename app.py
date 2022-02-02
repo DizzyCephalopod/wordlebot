@@ -32,7 +32,7 @@ def backtest_mode(answer: string):
     pass
 
 
-def filter(lexicon, rules):
+def eval_all(lexicon, rules):
     filtered = {}
     for word in lexicon.keys():
         if matches(rules, word):
@@ -46,22 +46,19 @@ if __name__ == '__main__':
     letters = util.read_letters()
 
     rules = []
-    rules.append(Rule.word().does_not_have('A'))
-    rules.append(Rule.word().has('E').at(1))
-    rules.append(Rule.word().has('R').anywhere())
-    rules.append(Rule.word().does_not_have('O'))
-    rules.append(Rule.word().does_not_have('S'))
-    rules.append(Rule.word().has('U').anywhere())
-    rules.append(Rule.word().does_not_have('N'))
-    rules.append(Rule.word().does_not_have('L'))
-    rules.append(Rule.word().does_not_have('I'))
-    rules.append(Rule.word().has('T').at(4))
+    rules.append(Rule.word().has('E').anywhere())
+    rules.append(Rule.word().has('O').anywhere())
+    rules.append(Rule.word().has('S').anywhere())
+    rules.append(Rule.word().has('T').anywhere())
+    rules.append(Rule.word().has('H').anywhere())
 
-    lexicon = filter(lexicon, rules)
+    # an elimination guess is one where 
+
+    lexicon = eval_all(lexicon, rules)
     print("--------")
     util.print_dict(lexicon)
     print("--------")
     words = [w for w in lexicon.keys()]
 
-    stats.score_yellow(words, letters)
+    stats.score_yellow(words, stats.letter_popularity(lexicon))
     stats.score_positionally(words, lexicon)
