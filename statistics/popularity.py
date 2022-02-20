@@ -62,6 +62,20 @@ def score_lexicon(lexicon):
         s += score(lexicon[word])
     return s
 
+def top_three(words, lexicon):
+    best_one = 'UNKNOWN'
+    top_score = 0
+    best_two = 'UNKNOWN'
+    best_three = 'UNKNOWN'
+    for word in words:
+        score = int(lexicon[word])
+        if score > top_score:
+            top_score = score
+            best_three = best_two
+            best_two = best_one
+            best_one = word
+    print(f"Best pure guesses: {best_one}, {best_two}, {best_three}")
+
 
 def score_positionally(words, lexicon):
     best = 'UNKNOWN'
