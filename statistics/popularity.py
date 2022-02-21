@@ -4,8 +4,8 @@ Used for deteremining likelyhood of a word being an answer.
 """
 from tokenize import String
 from time import sleep
-import requests
 import math
+import requests
 from word.rules import Rule
 
 
@@ -39,11 +39,17 @@ def score(word: String):
 
 
 def scale(num_string):
+    """
+    Make score smaller on a logorithmic scale
+    """
     num = int(num_string)
     return math.log(num) if num != 0 else 0
 
 
 def letter_popularity(lexicon):
+    """
+    Rank words in a lexicon by letter popularity.
+    """
     scores = {}
     for word in lexicon.keys():
         for letter in set(word):
@@ -63,10 +69,16 @@ def score_lexicon(lexicon):
     return s
 
 def top_three(words, lexicon):
-    best_one = 'UNKNOWN'
+    """
+    Get the top three words
+    """
+    if len(words) < 3:
+        return
+    UNKNOWN = 'UNKNOWN'
+    best_one = UNKNOWN
     top_score = 0
-    best_two = 'UNKNOWN'
-    best_three = 'UNKNOWN'
+    best_two = UNKNOWN
+    best_three = UNKNOWN
     for word in words:
         score = int(lexicon[word])
         if score > top_score:
@@ -74,7 +86,11 @@ def top_three(words, lexicon):
             best_three = best_two
             best_two = best_one
             best_one = word
-    print(f"Best pure guesses: {best_one}, {best_two}, {best_three}")
+    guesses = [best_one, best_two, best_three]
+    for guess_num in range(0, len(guesses)):
+        if guesses[guess_num] == UNKNOWN:
+            guesses = guesses[0:guess_num]
+    print(f"Best pure guesses: {', '.join(guesses)}")
 
 
 def score_positionally(words, lexicon):
